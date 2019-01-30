@@ -1,7 +1,7 @@
 <?php
 include_once 'resource/session.php';
 include_once 'resource/Database.php';
-include_once 'resource/utilities.php';
+include_once 'resource/utilities.php ';
 
 if(isset($_POST['loginBtn'])){
     //array to hold errors
