@@ -1,0 +1,21 @@
+/* contenet within the body, sizing and spacing for the content inside */
+/* Padding around the text content */
+body {
+  padding: 70px;
+  background-color: grey;
+}
+h1 {
+  text-align: center;
+  padding-top: 80px;
+  font-size: 3.5rem;
+}
+p.lead {
+
+  padding: 20px 15px;
+  text-align: center;
+}
+
+/* navbar content typogrophy */
+a.navbar-brand {
+  text-transform: uppercase;
+}

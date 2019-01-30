@@ -1,0 +1,46 @@
+W4 1/23/2019 Wednesday, for fuck sakes
+duplicate function not working, so I'm rolling back
+
+here's the code that doesn't work
+
+function checkDuplicateEntries($table, $coloumn_name, $value, $db){
+    try{
+        $sqlQuery = "SELECT * FROM" table "WHERE" $column_name"=:$column_name";
+        $statement = $db->prepare($sqlQuery);
+        $statement->execute(array(':$column_name' => $value));
+
+        if($row = $statement->fetch()){
+            return true;
+        }
+    }catch (PDOException $ex){
+        //handle exception
+    }
+}
+
+-----------------------------------------------Comment--End, I'm going back to the previous version of code that did work. I also might just create custom check function,
+This is covering all the check functions..
+------ Fin 22:34pm
+
+Below is my addition to the code, for the fix. On email check function
+
+FOR THE UTILITIES PHP code section
+function checkDuplicateEmail($value, $db){
+    try{
+        $sqlQuery = "SELECT email FROM users WHERE email=:email";
+        $statement = $db->prepare($sqlQuery);
+        $statement->execute(array(':email' => $value));
+
+        if($row = $statement->fetch()){
+            return true;
+        }
+        return false;
+    }catch (PDOException $ex){
+        //handle exception
+    }
+}
+
+FOR THE SIGN UP FORM
+else if(checkDuplicateEntries("users", "username", $username, $db)){
+        $result = flashMessage("Username is already taken, please try another one");
+    }
+
