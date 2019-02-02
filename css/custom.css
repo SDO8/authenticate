@@ -2,7 +2,7 @@
 /* Padding around the text content */
 body {
   padding: 70px;
-  background-color: grey;
+ /* background-color: grey;*/
 }
 h1 {
   text-align: center;
@@ -13,9 +13,4 @@ p.lead {
 
   padding: 20px 15px;
   text-align: center;
-}
-
-/* navbar content typogrophy */
-a.navbar-brand {
-  text-transform: uppercase;
 }

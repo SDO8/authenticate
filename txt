@@ -44,3 +44,31 @@ else if(checkDuplicateEntries("users", "username", $username, $db)){
         $result = flashMessage("Username is already taken, please try another one");
     }
 
+
+
+
+W5 2019 Friday 2/1/2019 Friday
+To add into when you've decided you layout, if you going to have a about and home page "li's"
+here's the code to display whne you signed in what to display and what not to display when youre not signed in
+Missing the full php tag
+<!--
+    <ul>
+?php if(isset($_SESSION['username'])): ?
+    <!-- <li><a href="#">My Profile</a></li> -->
+    <!-- <li><a href="logout.php">Logout</a></li> -->
+?php if(isset($_SESSION['username'])) echo $_SESSION['username'] ? </a>
+    <!-- <li><a href="#about">About</a></li> -->
+?php endif ?
+    </ul>
+-->
+
+
+
+
+W5 2019 Friday 2/1/2019 Friday
+sweetalert cool messsage box code, if needed below
+
+<script type="text/javascript">
+swal({
+  title: "Good job!",     text: "You clicked the button!",    icon: "success",    });
+</script>

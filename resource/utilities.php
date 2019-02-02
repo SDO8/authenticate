@@ -79,9 +79,9 @@ function show_errors($form_errors_array){
 
 function flashMessage($message, $passOrFail = "Fail"){
     if($passOrFail === "Pass"){
-        $data = "<p style='padiing:20px; border: 1px solid gray; color: green;'>{$message}</p>";
+        $data = "<div class='alert alert-success'>{$message}</p>";
     }else{
-        $data = "<p style='padding:20px; border:1px solid gray; color: red;'>{$message}</p>";
+        $data = "<div class='alert alert-danger'>{$message}</p>";
     }
 
     return $data;
@@ -91,11 +91,11 @@ function redirectTo($page){
     header("Location: {$page}.php");
 }
 
-function checkDuplicateEmail($value, $db){
+function checkDuplicateEntries($table, $column_name, $value, $db){
     try{
-        $sqlQuery = "SELECT email FROM users WHERE email=:email";
+        $sqlQuery = "SELECT * FROM " .$table. " WHERE " .$column_name."=:$column_name";
         $statement = $db->prepare($sqlQuery);
-        $statement->execute(array(':email' => $value));
+        $statement->execute(array(':$column_name' => $value));
 
         if($row = $statement->fetch()){
             return true;
@@ -104,18 +104,72 @@ function checkDuplicateEmail($value, $db){
     }catch (PDOException $ex){
         //handle exception
     }
+
 }
-function checkDuplicateUsername($value, $db){
-    try{
-        $sqlQuery = "SELECT username FROM users WHERE username=:username";
+
+/**
+ *  @param $user_id
+ */
+function rememberMe($user_id){
+    $encryptCookieData = base64_encode("UaQteh5i4yedntstemYODEC{$user_id}");
+    // Cookie set to expire in about 30days
+    setcookie("rememberUserCookie", $encryptCookieData, time()+60*60*24*100, "/");
+}
+
+/**
+ * checked if the cookie used is same with the encrypted cookie
+ * @param #db, database connection link
+ * @return bool, true if the user cookie is valid
+ */
+function isCookerValid($db){
+    $isValid = false;
+
+    if (isset($_COOKIE['rememberUserCookie'])) {
+
+        /**
+         * Decode cookies and sxtract user ID
+         */
+        $decryptCookieData = base64_decode($_COOKIE['rememberUserCookie']);
+        $user_id = explode("UaQteh5i4yedntstemYODEC", $decryptCookieData);
+        $userID = $user_id[1];
+
+        /**
+         * check if id retrieved from the cookie exist in the database
+         **/
+        $sqlQuery = "SELECT * FROM users WHERE id = :id";
         $statement = $db->prepare($sqlQuery);
-        $statement->execute(array(':username' => $value));
+        $statement->execute(array(':id' => $userID));
 
         if($row = $statement->fetch()){
-            return true;
+            $id = $row['id'];
+            $username = $row['username'];
+
+            /**
+             * Create the user session variable
+             */
+            $_SESSION['id'] = $id;
+            $_SESSION['username'] = $username;
+            $isValid = true;
+        }else{
+            /**
+             * cookie ID is invalid destroy session and layout user
+             */
+            $isValid = false;
+            signout();
+
         }
-        return false;
-    }catch (PDOException $ex){
-        //handle exception
     }
+    return $isValid;
+}
+function signout(){
+    unset($_SESSION['username']);
+    unset($_SESSION['id']);
+
+    if(isset($_COOKIE['rememberUserCookie'])){
+        unset($_COOKIE['rememberUserCookie']);
+        setcookie('rememberUserCookie', null, -1, '/');
+    }
+    session_destroy();
+    session_regenerate_id(true);
+    redirectTo('index');
 }
