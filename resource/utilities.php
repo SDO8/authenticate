@@ -173,3 +173,65 @@ function signout(){
     session_regenerate_id(true);
     redirectTo('index');
 }
+
+function guard(){
+
+    $isValid = true;
+    $inactive = 60 * 10; //2 mins
+    $fingerprint = md5($_SERVER['REMOTE_ADDR'] . $_SESSION['HTTP_USER_AGENT']);
+
+    if((isset($_SESSION['fingerprint']) && $_SESSION['fingerprint'] != $fingerprint)){
+        $isValid = false;
+        signout();
+    }else if ((isset($_SESSION['last_active']) && (time() - $_SESSION['last_active']) > $inactive) && $_SESSION['username']){
+        $isValid = false;
+        signout();
+    }else{
+        $_SESSION['last_active'] = time();
+    }
+
+    return $isValid;
+}
+
+function isValidImage($file){
+    $form_errors = array();
+
+    //split file name into an array using the dot (.)
+    $part = explode(".", $file);
+
+    //target the last element in the array
+    $extension = end($part);
+
+    switch(strtolower($extension)){
+        case 'jpg':
+        case 'gif':
+        case 'bmp':
+        case 'png':
+     
+        return $form_errors;
+    }
+
+    $form_errors[] = $extension . " is not a valid image extension";
+    return $form_errors;
+}
+
+function uploadAvatar($username){
+
+    $isImageMoved = true;
+
+    if($_FILES['avatar']['tmp_name']){
+
+        //File in the temp location
+        $temp_file = $_FILES['avatar']['tmp_namer'];
+        $ds = DIRECTORY_SEPARATOR; // uploads/
+        $avatar_name = $username.".jpg";
+
+        $path = "uploads".$ds.$avatar_name; //uploads/demo.jpg
+
+        if(move_uploaded_file($temp_file, $path)){
+            $isImageMoved = true;
+        }
+    }
+
+    return $isImageMoved;
+}

@@ -21,7 +21,20 @@ include_once 'resource/utilities.php';
 
 </head>
 <body>
-    
+
+<!--    STILL NEED TO ADD THE NAV BAR CODE IN HERE    -->
+<div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav"><i class="hide"><?php echo guard(); ?></li>
+      <li><a href="index.php">Home</a></li>
+            <?php if(isset($_SESSION['username'])) || isCookieValid($db))): ?>
+                  <li><a href="profile.php">My Profile</a></li> 
+                  <li><a href="logout.php">Logout</a></li> 
+            <?php else: ?>
+                  <li><a href="#about">About</a></li> 
+                  <li><a href="login.php">Login</a></li> 
+            <?php endif ?>
+      </ul>
+</div>
 
 
 

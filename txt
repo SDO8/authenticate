@@ -51,17 +51,24 @@ W5 2019 Friday 2/1/2019 Friday
 To add into when you've decided you layout, if you going to have a about and home page "li's"
 here's the code to display whne you signed in what to display and what not to display when youre not signed in
 Missing the full php tag
+
 <!--
-    <ul>
-?php if(isset($_SESSION['username'])): ?
+<div id="navbar" class="collapse navbar-collapse">
+    <ul class="nav navbar-nav"><i class="hide"><?php echo guard(); ?></li>
+    <li><a href="index.php">Home</a></li>
+<?php if(isset($_SESSION['username'])) || isCookieValid($db))): ?>
     <!-- <li><a href="#">My Profile</a></li> -->
     <!-- <li><a href="logout.php">Logout</a></li> -->
-?php if(isset($_SESSION['username'])) echo $_SESSION['username'] ? </a>
+<?php if(isset($_SESSION['username'])) echo $_SESSION['username'] ?> </a>
     <!-- <li><a href="#about">About</a></li> -->
-?php endif ?
+    <!-- <li><a href="#about">About</a></li> -->
+<?php endif ?>
     </ul>
+</div>
 -->
 
+[[   This specific piece of code is the code to signout the user after a certain period of time   ]]
+    As follows, ->            "    <?php echo guard();    "
 
 
 
@@ -72,3 +79,6 @@ sweetalert cool messsage box code, if needed below
 swal({
   title: "Good job!",     text: "You clicked the button!",    icon: "success",    });
 </script>
+
+
+Testing
